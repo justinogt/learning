@@ -1,16 +1,7 @@
 fn main() {
-  // Specify the data type "char"
-  let character_1: char = 'S';
-  let character_2: char = 'f';
-    
-  // Compiler interprets a single item in quotations as the "char" data type
-  let smiley_face = '😃';
+  // Declare a tuple of three elements
+  let (letter, number, bool_value) = ('E', 5i32, true);
 
-  // Compiler interprets a series of items in quotations as a "str" data type and creates a "&str" reference
-  let string_1 = "miley ";
-
-  // Specify the data type "str" with the reference syntax "&str"
-  let string_2: &str = "ace";
-
-  println!("{} is a {}{}{}{}.", smiley_face, character_1, string_1, character_2, string_2);
+  // Use tuple indexing and show the values of the elements in the tuple
+  println!("Is '{}' the {}th letter of the alphabet? {}", letter, number, bool_value);
 }
