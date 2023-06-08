@@ -1,20 +1,46 @@
 fn main() {
-    let mut car = car_factory(String::from("Red"), Transmission::Manual, false);
-    println!("Car 1 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    // let colors = ["Blue", "Green", "Red", "Silver"];
 
-    car = car_factory(String::from("Silver"), Transmission::Automatic, true);
-    println!("Car 2 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);
+    // let mut car = car_factory(String::from(colors[0]), Transmission::Manual, false, 0);
+    // let mut engine = Transmission::Manual;
 
-    car = car_factory(String::from("Yellow"), Transmission::SemiAuto, false);
-    println!("Car 3 = {}, {:?} transmission, convertible: {}, mileage: {}", car.color, car.transmission, car.convertible, car.mileage);    
+    // // Car order #1: New, Manual, Hard top
+    // car = car_factory(String::from(colors[0]), engine, true, 0);
+    // println!("Car order 1: {:?}, Hard top = {}, {:?}, {}, {} miles", car.age.0, car.roof, car.motor, car.color, car.age.1);
+
+    // // Car order #2: Used, Semi-automatic, Convertible
+    // engine = Transmission::SemiAuto;
+    // car = car_factory(String::from(colors[1]), engine, false, 100);
+    // println!("Car order 2: {:?}, Hard top = {}, {:?}, {}, {} miles", car.age.0, car.roof, car.motor, car.color, car.age.1);
+
+    // // Car order #3: Used, Automatic, Hard top
+    // engine = Transmission::Automatic;
+    // car = car_factory(String::from(colors[2]), engine, true, 200);
+    // println!("Car order 3: {:?}, Hard top = {}, {:?}, {}, {} miles", car.age.0, car.roof, car.motor, car.color, car.age.1);
+
+
+    // Car order #1: New, Manual, Hard top
+    car_factory(String::from("Orange"), Transmission::Manual, true, 0);
+
+    // Car order #2: Used, Semi-automatic, Convertible
+    car_factory(String::from("Red"), Transmission::SemiAuto, false, 565);
+
+    // Car order #3: Used, Automatic, Hard top
+    car_factory(String::from("White"), Transmission::Automatic, true, 3000);
 }
 
 // Declare Car struct to describe vehicle with four named fields
 struct Car {
     color: String,
-    transmission: Transmission,
-    convertible: bool,
-    mileage: u32,
+    motor: Transmission,
+    roof: bool,
+    age: (Age, u32)
+}
+
+#[derive(PartialEq, Debug)]
+enum Age {
+    New,
+    Used
 }
 
 #[derive(PartialEq, Debug)]
@@ -26,10 +52,41 @@ enum Transmission {
     Automatic,
 }
 
-// Build a "Car" by using values from the input arguments
-// - Color of car (String)
-// - Transmission type (enum value)
-// - Convertible (boolean, true if car is a convertible)
-fn car_factory(color: String, transmission: Transmission, convertible: bool) -> Car {
-    Car { color, transmission, convertible, mileage: 0 }
+// Build a new "Car" using the values of four input arguments
+// - color (String)
+// - motor (Transmission enum)
+// - roof (boolean, true if the car has a hard top roof)
+// - miles (u32)
+// Call the car_quality(miles) function to get the car age
+// Return an instance of a "Car" struct with the arrow `->` syntax
+fn car_factory(color: String, motor: Transmission, roof: bool, miles: u32) -> Car {
+
+    let (age, miles) = car_quality(miles);
+    if age == Age::Used {
+        if roof {
+            println!("Preparing a used car: {:?}, {}, Hard top, {} miles", motor, color, miles);
+        } else {
+            println!("Preparing a used car: {:?}, {}, Convertible, {} miles", motor, color, miles);
+        }
+    } else {
+        if roof {
+            println!("Building a new car: {:?}, {}, Hard top, {} miles", motor, color, miles);
+        } else {
+            println!("Building a new car: {:?}, {}, Convertible, {} miles", motor, color, miles);
+        }
+    }
+
+    Car { color, motor, roof, age: car_quality(miles) }
+}
+
+// Get the car quality by testing the value of the input argument
+// - miles (u32)
+// Create a tuple for the car quality with the Age ("New" or "Used") and mileage
+// Return a tuple with the arrow `->` syntax
+fn car_quality(miles: u32) -> (Age, u32) {
+    if miles == 0 {
+        (Age::New, 0)
+    } else {
+        (Age::Used, miles)
+    }
 }
